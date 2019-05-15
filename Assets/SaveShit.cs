@@ -6,13 +6,14 @@ using System.IO;
 
 public class SaveShit : MonoBehaviour
 {
+    public GameObject nerd;
 
     private class SaveObject
     {
         public Vector3 nerdPosition;
     }
 
-    private void Save()
+    public void Save()
     {
         Vector3 playerPosition = transform.position;
 
@@ -22,8 +23,22 @@ public class SaveShit : MonoBehaviour
         string json = JsonUtility.ToJson(saveObject);
 
         File.WriteAllText(Application.dataPath + "/save.txt", json);
+        Debug.Log("Saved");
 
 
+    }
+
+    public void Load()
+    {
+        if (File.Exists(Application.dataPath+"/save.txt"))
+        {
+            string saveString = File.ReadAllText(Application.dataPath + "/save.txt");
+
+            SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
+
+            nerd.transform.position = saveObject.nerdPosition;
+
+        }
     }
 
     void Awake()
@@ -37,9 +52,5 @@ public class SaveShit : MonoBehaviour
         SaveObject loadedSaveObject = JsonUtility.FromJson<SaveObject>(json);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
 }
