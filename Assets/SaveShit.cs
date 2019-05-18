@@ -32,17 +32,24 @@ public class SaveShit : MonoBehaviour
     {
         if (File.Exists(Application.dataPath+"/save.txt"))
         {
+            Rigidbody2D nerdRB = nerd.GetComponent<Rigidbody2D>();
+
+
             string saveString = File.ReadAllText(Application.dataPath + "/save.txt");
 
             SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
 
             nerd.transform.position = saveObject.nerdPosition;
 
+            nerdRB.velocity = Vector2.zero;
+            nerdRB.angularVelocity = 0;
         }
     }
 
     void Awake()
     {
+         
+
         SaveObject saveObject = new SaveObject
         {
             
