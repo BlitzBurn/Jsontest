@@ -14,6 +14,9 @@ public class NerdInfo
 
 public class SaveShitServerBased : MonoBehaviour
 {
+
+    string serverSaveFile;
+    string saveData;
     public GameObject TheFuckingNerd;
 
     public GameObject Load(string Name)
@@ -36,16 +39,31 @@ public class SaveShitServerBased : MonoBehaviour
         return null;
     }
     
-    public void Save(string fileName, string savedata)
-    {
 
-        var request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/" + fileName);
+
+
+
+    public void Save()
+    {
+        Debug.Log("Step one");
+        //string fileName, string savedata
+
+        Vector3 playerPosition = transform.position;
+
+        NerdInfo saveObject = new NerdInfo
+        {
+            NerdPosition = playerPosition
+        };
+
+        string serverData = JsonUtility.ToJson(saveObject);
+
+        var request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/" + serverData);
         request.ContentType = "application/json";
         request.Method = "PUT";
 
        using (var streamWriter = new StreamWriter(request.GetRequestStream()))
        {
-            streamWriter.Write(savedata);
+            streamWriter.Write(saveData);
             streamWriter.Close();
        }
 
